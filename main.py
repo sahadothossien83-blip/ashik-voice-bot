@@ -5,7 +5,7 @@ import uvicorn
 from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
 
-BOT_TOKEN = os.getenv("BOT_TOKEN")
+BOT_TOKEN = os.getenv("8232046468:AAF5oku3OYBn9Ruk7PejjQLVG8x3nKfQZ6Q")
 app = FastAPI()
 
 @app.get("/")
