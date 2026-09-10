@@ -1,18 +1,31 @@
 import os
+import asyncio
+from fastapi import FastAPI
+import uvicorn
 from telegram import Update
-from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters, ContextTypes
+from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
 
-TOKEN = os.environ.get("BOT_TOKEN")
+BOT_TOKEN = os.getenv("8232046468:AAF5oku3OYBn9Ruk7PejjQLVG8x3nKfQZ6Q")
+app = FastAPI()
+
+@app.get("/")
+def home():
+    return {"status": "Ashik Voice Bot is Running!"}
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("হাই ভাই! আমি চালু আছি ✅")
+    await update.message.reply_text("হাই! আমি আশিক ভয়েস বট 🤖\nতুমি ভয়েস পাঠাও, আমি রিপ্লাই দিবো।")
 
-async def echo(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text(f"তুমি বলছো: {update.message.text}")
+async def handle_voice(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text("তোমার ভয়েস পেয়েছি! ❤️ ভয়েস ক্লোন প্রসেসিং চালু আছে...")
 
-if __name__ == '__main__':
-    app = ApplicationBuilder().token(TOKEN).build()
-    app.add_handler(CommandHandler("start", start))
-    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, echo))
-    print("Bot is running...")
-    app.run_polling()
+async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text(f"তুমি বললে: {update.message.text}")
+
+async def run_bot():
+    if not BOT_TOKEN:
+        print("BOT_TOKEN পাওয়া যায়নি!")
+        return
+    application = Application.builder().token(BOT_TOKEN).build()
+    application.add_handler(CommandHandler("start", start))
+    application.add_handler(MessageHandler(filters.VOICE, handle_voice))
+   
